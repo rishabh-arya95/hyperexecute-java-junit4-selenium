@@ -1,21 +1,22 @@
 package com.coffeemachine;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 
-public class BadUsageTest extends TestCase {
+public class BadUsageTest{
 
     public Actionwords actionwords;
     public WebDriver driver;
     public String status = "failed";
     public String featureName = "Bad usage";
 
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         actionwords = new Actionwords();
     }
 
@@ -25,7 +26,8 @@ public class BadUsageTest extends TestCase {
 
     }
 
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         ((JavascriptExecutor) driver).executeScript("lambda-status=" + status);
 
         driver.quit();
@@ -33,6 +35,7 @@ public class BadUsageTest extends TestCase {
 
     // You keep getting coffee even if the "Empty grounds" message is displayed. That said it's not a fantastic idea, you'll get ground everywhere when you'll decide to empty it.
     // Tags: priority:2
+    @Test
     public void testFullGroundsDoesNotBlockCoffee() throws Exception {
         scenarioSetup("Full grounds does not block coffee");
 

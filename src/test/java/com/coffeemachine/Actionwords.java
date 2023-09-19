@@ -25,9 +25,12 @@ public class Actionwords {
     }
 
     public void iStartTheCoffeeMachineUsingLanguageLang(String lang) {
-        String location = "https://hiptest.github.io/hps-java-junit-selenium/src/web/coffee_machine.html";
+        // String location = "https://hiptest.github.io/hps-java-junit-selenium/src/web/coffee_machine.html";
+
+        String location = System.getenv("COFFEE_MACHINE_LOCATION");
         if (location == null) {
-            location = "file://" + System.getProperty("user.dir") + "/src/web/coffee_machine.html";
+            // location = "file://" + System.getProperty("user.dir") + "/src/web/coffee_machine.html";
+            location = "https://hiptest.github.io/hps-java-junit-selenium/src/web/coffee_machine.html";
         }
 
         System.out.println("Using local coffee machine: " + location);

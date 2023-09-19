@@ -1,21 +1,23 @@
 package com.coffeemachine;
 
-import junit.framework.TestCase;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 
-public class ServeCoffeeTest extends TestCase {
+public class ServeCoffeeTest {
     // Tags: sprint:1 JIRA:CMM-1
     public Actionwords actionwords;
     public WebDriver driver;
     public String status = "failed";
     public String featureName = "Serve coffee";
 
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         actionwords = new Actionwords();
     }
 
@@ -24,14 +26,15 @@ public class ServeCoffeeTest extends TestCase {
         actionwords.setDriver(driver);
     }
 
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         ((JavascriptExecutor) driver).executeScript("lambda-status=" + status);
-
         driver.quit();
     }
 
     // Well, sometimes, you just get a coffee.
     // Tags: priority:0
+    @Test
     public void testSimpleUse() throws Exception {
         scenarioSetup("Simple use");
 

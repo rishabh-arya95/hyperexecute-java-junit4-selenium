@@ -1,21 +1,23 @@
 package com.coffeemachine;
 
-import junit.framework.TestCase;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 
-public class SupportInternationalisationTest extends TestCase {
+public class SupportInternationalisationTest {
     // Tags: sprint:3
     public Actionwords actionwords;
     public WebDriver driver;
     public String status = "failed";
     public String featureName = "Support internationalisation";
 
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         actionwords = new Actionwords();
     }
 
@@ -25,7 +27,8 @@ public class SupportInternationalisationTest extends TestCase {
 
     }
 
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         ((JavascriptExecutor) driver).executeScript("lambda-status=" + status);
 
         driver.quit();
@@ -33,6 +36,7 @@ public class SupportInternationalisationTest extends TestCase {
 
     // 
     // Tags: priority:1
+    @Test
     public void testNoMessagesAreDisplayedWhenMachineIsShutDown() throws Exception {
         scenarioSetup("No messages are displayed when machine is shut down");
 
@@ -55,10 +59,11 @@ public class SupportInternationalisationTest extends TestCase {
         status = "pass";
     }
 
+    @Test
     public void testMessagesAreBasedOnLanguageEnglish() throws Exception {
         messagesAreBasedOnLanguage("en", "Ready");
     }
-
+    @Test
     public void testMessagesAreBasedOnLanguageFrench() throws Exception {
         messagesAreBasedOnLanguage("fr", "Pret");
     }

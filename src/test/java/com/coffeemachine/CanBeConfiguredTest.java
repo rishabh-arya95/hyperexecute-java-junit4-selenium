@@ -1,21 +1,23 @@
 package com.coffeemachine;
 
-import junit.framework.TestCase;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 
-public class CanBeConfiguredTest extends TestCase {
+public class CanBeConfiguredTest {
     // Tags: sprint:2
     public Actionwords actionwords;
     public WebDriver driver;
     public static String status = "failed";
     public String featureName = "Can be configured";
 
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         actionwords = new Actionwords();
     }
 
@@ -24,14 +26,15 @@ public class CanBeConfiguredTest extends TestCase {
         actionwords.setDriver(driver);
 
     }
-
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         ((JavascriptExecutor) driver).executeScript("lambda-status=" + status);
         driver.quit();
     }
 
     // 
     // Tags: priority:1
+    @Test
     public void testDisplaySettings() throws Exception {
         scenarioSetup("Display settings");
 
@@ -45,6 +48,7 @@ public class CanBeConfiguredTest extends TestCase {
     }
     // 
     // Tags: priority:0
+    @Test
     public void testDefaultSettings() throws Exception {
         scenarioSetup("Default settings");
 
