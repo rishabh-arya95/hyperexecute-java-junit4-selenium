@@ -1,6 +1,8 @@
 package com.coffeemachine;
 
 import junit.framework.TestCase;
+
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -11,8 +13,7 @@ public class WaterTest extends TestCase {
 
     public Actionwords actionwords;
     public WebDriver driver;
-    private CBTHelper cbt;
-    public String score = "fail";
+    public String status = "fail";
     public String featureName = "Water";
 
     protected void setUp() throws Exception {
@@ -22,10 +23,6 @@ public class WaterTest extends TestCase {
 
     protected void scenarioSetup(String testName)  throws Exception {
         driver = new SeleniumDriverGetter().getDriver(featureName, testName);
-        if (System.getenv("USE_CBT") != null) {
-            cbt = new CBTHelper();
-            cbt.setSessionId(((RemoteWebDriver)driver).getSessionId().toString());
-        }
         actionwords.setDriver(driver);
 
         // Given the coffee machine is started
@@ -35,9 +32,7 @@ public class WaterTest extends TestCase {
     }
 
     protected void tearDown() throws Exception {
-        if (System.getenv("USE_CBT") != null) {
-            cbt.setScore(score);
-        }
+        ((JavascriptExecutor) driver).executeScript("lambda-status=" + status);
         driver.quit();
     }
 
@@ -50,7 +45,7 @@ public class WaterTest extends TestCase {
         actionwords.iTakeCoffeeNumberCoffees(50);
         // Then message "Fill tank" should be displayed
         actionwords.messageMessageShouldBeDisplayed("Fill tank");
-        score = "pass";
+        status = "pass";
     }
     // 
     // Tags: priority:2
@@ -65,7 +60,7 @@ public class WaterTest extends TestCase {
         actionwords.iTakeACoffee();
         // Then coffee should not be served
         actionwords.coffeeShouldNotBeServed();
-        score = "pass";
+        status = "pass";
     }
     // 
     // Tags: priority:0
@@ -78,6 +73,6 @@ public class WaterTest extends TestCase {
         actionwords.iFillTheWaterTank();
         // Then message "Ready" should be displayed
         actionwords.messageMessageShouldBeDisplayed("Ready");
-        score = "pass";
+        status = "pass";
     }
 }

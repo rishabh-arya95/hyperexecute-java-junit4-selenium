@@ -1,6 +1,8 @@
 package com.coffeemachine;
 
 import junit.framework.TestCase;
+
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -11,8 +13,7 @@ public class GroundsTest extends TestCase {
 
     public Actionwords actionwords;
     public WebDriver driver;
-    private CBTHelper cbt;
-    public String score = "fail";
+    public String status = "fail";
     public String featureName = "Grounds";
 
     protected void setUp() throws Exception {
@@ -22,10 +23,6 @@ public class GroundsTest extends TestCase {
 
     protected void scenarioSetup(String testName)  throws Exception {
         driver = new SeleniumDriverGetter().getDriver(featureName, testName);
-        if (System.getenv("USE_CBT") != null) {
-            cbt = new CBTHelper();
-            cbt.setSessionId(((RemoteWebDriver)driver).getSessionId().toString());
-        }
         actionwords.setDriver(driver);
 
         // Given the coffee machine is started
@@ -35,9 +32,7 @@ public class GroundsTest extends TestCase {
     }
 
     protected void tearDown() throws Exception {
-        if (System.getenv("USE_CBT") != null) {
-            cbt.setScore(score);
-        }
+        ((JavascriptExecutor) driver).executeScript("lambda-status=" + status);
         driver.quit();
     }
 
@@ -50,7 +45,7 @@ public class GroundsTest extends TestCase {
         actionwords.iTakeCoffeeNumberCoffees(30);
         // Then message "Empty grounds" should be displayed
         actionwords.messageMessageShouldBeDisplayed("Empty grounds");
-        score = "pass";
+        status = "pass";
     }
     // 
     // Tags: priority:1
@@ -63,6 +58,6 @@ public class GroundsTest extends TestCase {
         actionwords.iEmptyTheCoffeeGrounds();
         // Then message "Ready" should be displayed
         actionwords.messageMessageShouldBeDisplayed("Ready");
-        score = "pass";
+        status = "pass";
     }
 }

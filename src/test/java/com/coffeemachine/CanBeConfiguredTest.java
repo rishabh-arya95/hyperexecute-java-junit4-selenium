@@ -1,6 +1,8 @@
 package com.coffeemachine;
 
 import junit.framework.TestCase;
+
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -9,8 +11,7 @@ public class CanBeConfiguredTest extends TestCase {
     // Tags: sprint:2
     public Actionwords actionwords;
     public WebDriver driver;
-    private CBTHelper cbt;
-    public String score = "fail";
+    public static String status = "failed";
     public String featureName = "Can be configured";
 
     protected void setUp() throws Exception {
@@ -20,18 +21,12 @@ public class CanBeConfiguredTest extends TestCase {
 
     protected void scenarioSetup(String testName)  throws Exception {
         driver = new SeleniumDriverGetter().getDriver(featureName, testName);
-        if (System.getenv("USE_CBT") != null) {
-            cbt = new CBTHelper();
-            cbt.setSessionId(((RemoteWebDriver)driver).getSessionId().toString());
-        }
         actionwords.setDriver(driver);
 
     }
 
     protected void tearDown() throws Exception {
-        if (System.getenv("USE_CBT") != null) {
-            cbt.setScore(score);
-        }
+        ((JavascriptExecutor) driver).executeScript("lambda-status=" + status);
         driver.quit();
     }
 
@@ -46,7 +41,7 @@ public class CanBeConfiguredTest extends TestCase {
         actionwords.iSwitchToSettingsMode();
         // Then displayed message is:
         actionwords.displayedMessageIs("Settings:\n - 1: water hardness\n - 2: grinder");
-        score = "pass";
+        status = "passed";
     }
     // 
     // Tags: priority:0
@@ -59,6 +54,6 @@ public class CanBeConfiguredTest extends TestCase {
         actionwords.iSwitchToSettingsMode();
         // Then settings should be:
         actionwords.settingsShouldBe("| water hardness | 2      |\n| grinder        | medium |");
-        score = "pass";
+        status = "passed";
     }
 }

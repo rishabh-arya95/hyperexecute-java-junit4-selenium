@@ -18,25 +18,13 @@ public class SeleniumDriverGetter {
 
         caps.setCapability("name", "Coffee machine - " + featureName + "/" + testName);
         caps.setCapability("build", System.getenv("TRAVIS_BUILD_NUMBER"));
-
-        if (System.getenv("USE_CBT") != null) {
-          caps.setCapability("browserName", "Chrome");
-          caps.setCapability("version", "66x64");
-          caps.setCapability("platform", "Windows 10");
-          caps.setCapability("screenResolution", "1366x768");
-          caps.setCapability("record_video", "true");
-        }
-
-        if (System.getenv("USE_SAUCELABS") != null) {
-          caps.setCapability("platform", "Windows 10");
-          caps.setCapability("version", "latest");
-        }
-
-        if (System.getenv("USE_REMOTE_DRIVER") != null) {
-            return getRemoteDriver(caps);
-        }
-
-        return getLocalDriver(caps);
+        caps.setCapability("tunnel",false);
+        caps.setCapability("network",true);
+        caps.setCapability("console",true);
+        caps.setCapability("visual",true);
+        String platformName = System.getenv("HYPEREXECUTE_PLATFORM") != null ? System.getenv("HYPEREXECUTE_PLATFORM") : "Windows 10";
+        caps.setCapability("platform", platformName);
+        return getRemoteDriver(caps);
     }
 
     private WebDriver getLocalDriver(DesiredCapabilities caps) {
@@ -61,13 +49,12 @@ public class SeleniumDriverGetter {
     }
 
     private WebDriver getRemoteDriver(DesiredCapabilities caps) throws Exception {
-        String username = System.getenv("REMOTE_DRIVER_USERNAME");
-        String authkey = System.getenv("REMOTE_DRIVER_PASSWORD");
-        String driverUrl = System.getenv("REMOTE_DRIVER_URL");
+        String username = System.getenv("LT_USERNAME");
+        String authkey = System.getenv("LT_ACCESS_KEY");
         URL hubUrl = null;
 
         try {
-          hubUrl = new URL("http://" + username + ":" + authkey + "@" + driverUrl);
+          hubUrl = new URL("https://" + username + ":" + authkey + "@hub.lambdatest.com/wd/hub");
         } catch (MalformedURLException e) {
           System.out.println("Invalid HUB URL");
         }

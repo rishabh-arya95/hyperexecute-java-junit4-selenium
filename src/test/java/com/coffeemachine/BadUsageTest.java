@@ -1,6 +1,8 @@
 package com.coffeemachine;
 
 import junit.framework.TestCase;
+
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -9,8 +11,7 @@ public class BadUsageTest extends TestCase {
 
     public Actionwords actionwords;
     public WebDriver driver;
-    private CBTHelper cbt;
-    public String score = "fail";
+    public String status = "failed";
     public String featureName = "Bad usage";
 
     protected void setUp() throws Exception {
@@ -20,18 +21,13 @@ public class BadUsageTest extends TestCase {
 
     protected void scenarioSetup(String testName)  throws Exception {
         driver = new SeleniumDriverGetter().getDriver(featureName, testName);
-        if (System.getenv("USE_CBT") != null) {
-            cbt = new CBTHelper();
-            cbt.setSessionId(((RemoteWebDriver)driver).getSessionId().toString());
-        }
         actionwords.setDriver(driver);
 
     }
 
     protected void tearDown() throws Exception {
-        if (System.getenv("USE_CBT") != null) {
-            cbt.setScore(score);
-        }
+        ((JavascriptExecutor) driver).executeScript("lambda-status=" + status);
+
         driver.quit();
     }
 
@@ -50,6 +46,6 @@ public class BadUsageTest extends TestCase {
         actionwords.messageMessageShouldBeDisplayed("Empty grounds");
         // And coffee should be served
         actionwords.coffeeShouldBeServed();
-        score = "pass";
+        status = "passed";
     }
 }

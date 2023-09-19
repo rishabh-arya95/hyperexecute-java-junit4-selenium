@@ -1,6 +1,8 @@
 package com.coffeemachine;
 
 import junit.framework.TestCase;
+
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -11,8 +13,7 @@ public class BeansTest extends TestCase {
 
     public Actionwords actionwords;
     public WebDriver driver;
-    private CBTHelper cbt;
-    public String score = "fail";
+    public String status = "fail";
     public String featureName = "Beans";
 
     protected void setUp() throws Exception {
@@ -20,12 +21,8 @@ public class BeansTest extends TestCase {
         actionwords = new Actionwords();
     }
 
-    protected void scenarioSetup(String testName)  throws Exception {
+    protected void scenarioSetup(String testName) throws Exception {
         driver = new SeleniumDriverGetter().getDriver(featureName, testName);
-        if (System.getenv("USE_CBT") != null) {
-            cbt = new CBTHelper();
-            cbt.setSessionId(((RemoteWebDriver)driver).getSessionId().toString());
-        }
         actionwords.setDriver(driver);
 
         // Given the coffee machine is started
@@ -35,13 +32,11 @@ public class BeansTest extends TestCase {
     }
 
     protected void tearDown() throws Exception {
-        if (System.getenv("USE_CBT") != null) {
-            cbt.setScore(score);
-        }
+        ((JavascriptExecutor) driver).executeScript("lambda-status=" + status);
         driver.quit();
     }
 
-    // 
+    //
     // Tags: priority:0
     public void testMessageFillBeansIsDisplayedAfter38CoffeesAreTaken() throws Exception {
         scenarioSetup("Message \"Fill beans\" is displayed after 38 coffees are taken");
@@ -50,9 +45,10 @@ public class BeansTest extends TestCase {
         actionwords.iTakeCoffeeNumberCoffees(38);
         // Then message "Fill beans" should be displayed
         actionwords.messageMessageShouldBeDisplayed("Fill beans");
-        score = "pass";
+        status = "pass";
     }
-    // 
+
+    //
     // Tags: priority:2
     public void testItIsPossibleToTake40CoffeesBeforeThereIsReallyNoMoreBeans() throws Exception {
         scenarioSetup("It is possible to take 40 coffees before there is really no more beans");
@@ -67,9 +63,10 @@ public class BeansTest extends TestCase {
         actionwords.coffeeShouldNotBeServed();
         // And message "Fill beans" should be displayed
         actionwords.messageMessageShouldBeDisplayed("Fill beans");
-        score = "pass";
+        status = "pass";
     }
-    // 
+
+    //
     // Tags: priority:0
     public void testAfterAddingBeansTheMessageFillBeansDisappears() throws Exception {
         scenarioSetup("After adding beans, the message \"Fill beans\" disappears");
@@ -80,6 +77,6 @@ public class BeansTest extends TestCase {
         actionwords.iFillTheBeansTank();
         // Then message "Ready" should be displayed
         actionwords.messageMessageShouldBeDisplayed("Ready");
-        score = "pass";
+        status = "pass";
     }
 }
