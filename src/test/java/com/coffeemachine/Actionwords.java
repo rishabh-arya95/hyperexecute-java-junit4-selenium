@@ -25,7 +25,7 @@ public class Actionwords {
     }
 
     public void iStartTheCoffeeMachineUsingLanguageLang(String lang) {
-        String location = System.getenv("COFFEE_MACHINE_LOCATION");
+        String location = "https://hiptest.github.io/hps-java-junit-selenium/src/web/coffee_machine.html";
         if (location == null) {
             location = "file://" + System.getProperty("user.dir") + "/src/web/coffee_machine.html";
         }

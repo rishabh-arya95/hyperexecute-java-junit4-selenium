@@ -18,6 +18,7 @@ public class SeleniumDriverGetter {
 
         caps.setCapability("name", "Coffee machine - " + featureName + "/" + testName);
         caps.setCapability("build", System.getenv("TRAVIS_BUILD_NUMBER"));
+        caps.setCapability("browserName", "Chrome");
         caps.setCapability("tunnel",false);
         caps.setCapability("network",true);
         caps.setCapability("console",true);
