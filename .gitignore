@@ -31,3 +31,6 @@ target
 .hyperexecute
 .vscode
 hyperexecute
+hyperexecute-cli
+hyperexecuteupdate
+.updatedhyperexecute.yaml
